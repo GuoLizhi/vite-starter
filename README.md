@@ -86,3 +86,78 @@ new Vue({
 ✔ Select a framework: › react
 ✔ Select a variant: › react
 ```
+
+## 7. vite CSS
+
+### 7.1 CSS Variable
+
+```css
+:root {
+  --main-bg-color: red;
+}
+
+.root {
+  background-color: var(--main-bg-color);
+}
+```
+
+### 7.2 PostCSS
+
+vite本身支持PostCSS，只需要在根目录下面添加postcss.config.js文件即可
+
+### 7.3 @import alias
+
+```js
+  resolve: {
+    alias: {
+      '@style': path.resolve(__dirname, 'src/styles'),
+    }
+  }
+```
+
+### 7.4 CSS Modules
+
+```js
+import style from '@style/test.module.css'
+```
+
+### 7.5 CSS预处理器
+
+vite天然支持Less/Scss/Stylus预处理器，比如当我们使用less时只需要安装less NPM包即可
+
+```
+yarn add less -D
+```
+
+## 8.typescript支持
+
+vite只负责编译ts，不负责校验ts。如果我们需要校验ts，可以在build的时候，提前使用`tsc --noEmit`
+
+```
+"build": "tsc --noEmit && vite build",
+```
+
+新建一个tsconfig.json文件
+
+```json
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": ["ESNext", "DOM"]
+  },
+  "include": ["src/**/*.ts"]
+}
+```
+
+可以使用vue-tsc来编译Vue SFC
+
+```
+"build": "vue-tsc --noEmit && tsc --noEmit && vite build"
+```
