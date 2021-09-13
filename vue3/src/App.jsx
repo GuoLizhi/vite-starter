@@ -3,6 +3,8 @@ import '@style/style.css'
 import style from '@style/test.module.css'
 import '@style/index.less'
 import { mike } from './test'
+import logo from './assets/logo.png'
+console.log(logo)
 
 export default defineComponent({
   setup() {

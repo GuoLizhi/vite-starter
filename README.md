@@ -161,3 +161,19 @@ vite只负责编译ts，不负责校验ts。如果我们需要校验ts，可以�
 ```
 "build": "vue-tsc --noEmit && tsc --noEmit && vite build"
 ```
+
+## 9.静态文件处理
+vite中对文件的操作，也已经封装好了。
+
+```js
+// 引用文件
+import logo from './assets/logo.png'
+// 返回文件的路径
+import test from './test.ts?url'
+// 返回文件的具体内容
+import test from './test.ts?raw'
+// 引用一个worker
+import Worker from './worker?worker'
+// 引用一个json文件
+import pkg from './package.json'
+```
