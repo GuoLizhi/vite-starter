@@ -177,3 +177,79 @@ import Worker from './worker?worker'
 // 引用一个json文件
 import pkg from './package.json'
 ```
+
+## 10.eslint和prettier
+如果项目中需要引入eslint，只需要在项目根目录下面添加`.eslintrc.js`文件
+
+```
+yarn add eslint-plugin-standard eslint-plugin-import eslint-plugin-node eslint-plugin-promise -D
+```
+
+prettier需要借助vscode的prettier插件，将prettier设置为默认的formatter
+
+```
+# 对所有的js文件进行eslint校验
+"lint": "eslint --ext js src/"
+# 如果需要在build之前进行lint校验
+"build": "npm run lint && tsc --noEmit && vite build"
+```
+
+eslint添加全局变量
+
+```js
+{
+  globals: {
+    postMessage: true
+  }
+}
+```
+
+## 11.环境变量
+vite中环境变量存在于`import.meta.env`中。vite提供了4个默认的环境变量
+
+1. MODE 区分开发环境和生产环境
+2. DEV 是否是开发环境
+3. PROD 是否是生产环境
+4. BASE_URL
+
+当然我们也可以通过添加`.env`文件来定义环境变量，自定义的环境变量需要以`VITE_`开头。
+
+```
+VITE_TITLE=hello
+```
+
+我们可以通过`.env`文件的名字，对不同的环境来注入不同的环境变量
+
+- .env.development 开发环境的环境变量
+- .env.production 生产环境的环境变量
+
+对于ts的开发者，我们新注入的环境变量在ts中可能会没有类型声明，我们可以修改`vite-env.d.ts`文件来定义类型
+
+```ts
+interface ImportMetaEnv {
+  VITE_TITLE: string
+}
+```
+
+## 12. 热更新
+vite中默认开启了热更新，对于不同的框架，热更新的实现不同。
+
+```js
+if (import.meta.hot) {
+  import.meta.hot.accept((newModule) => {
+    newModule.render()
+  })
+}
+```
+
+## 13. glob import
+可以通过正则的形式，引入一组js文件
+
+```js
+// 引入glob文件夹下的所有js文件
+const globModules = import.meta.glob('./glob/*.js')
+Object.entries(globModules).forEach(([k, v]) => {
+  // m.default就是模块的默认导出
+  v().then(m => console.log(k + ':' + m.default))
+})
+```
